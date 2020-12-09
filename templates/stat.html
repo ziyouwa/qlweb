@@ -1,0 +1,15 @@
+
+<!--stat.html-->
+
+<!--Embed the header.html template at this location-->
+{{ template "header.html" .}}
+
+<fieldset>
+    <legend>{{.title}}    </legend>
+    <p>Name:{{.payload.Name}}</p>
+    <p>Boot Time:{{.payload.Boot}}</p>
+    <p>Uptime:{{.payload.Uptime}}</p>
+    <p>Time:{{.payload.Time}}</p>
+</fieldset>
+<!--Embed the footer.html template at this location-->
+{{ template "footer.html" .}}
