@@ -5,11 +5,11 @@
 {{ template "header.html" .}}
 
 <fieldset>
-    <legend>{{.title}}    </legend>
-    <p>Name:{{.payload.Name}}</p>
+    <legend>{{.title}}</legend>
+    <p>Name:{{.payload}}</p>
     <p>Boot Time:{{.payload.Boot}}</p>
-    <p>Uptime:{{.payload.Uptime}}</p>
-    <p>Time:{{.payload.Time}}</p>
+    <p>Uptime:{{.payload.Data.Uptime}}</p>
+    <p>Server Time:{{.payload.Data.Time}}</p>
 </fieldset>
 <!--Embed the footer.html template at this location-->
 {{ template "footer.html" .}}

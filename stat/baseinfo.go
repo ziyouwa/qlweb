@@ -4,7 +4,10 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"qlweb/utils"
 	"time"
+
+	"github.com/gin-gonic/gin"
 )
 
 // Node /proc/uptime
@@ -18,11 +21,10 @@ type Node struct {
 	Time   string
 }
 
-// Stat get node system info
-func Stat() (*Node, error) {
+func baseInfo() (*Node, error) {
 	b, err := ioutil.ReadFile("/proc/uptime")
 	if err != nil {
-		log.Println("Read file /proc/uptime: ", err.Error())
+		return nil, err
 	}
 	for i := 0; i < len(b); i++ {
 		if b[i] == ' ' {
@@ -33,7 +35,6 @@ func Stat() (*Node, error) {
 	t := string(b) + "s"
 	d, err := time.ParseDuration(t)
 	if err != nil {
-		log.Println("time.ParseDuration: ", err.Error())
 		return nil, err
 	}
 	boot := time.Now().Add(-d).Local().Format("2006-01-02 15:01:01 Mon")
@@ -42,7 +43,24 @@ func Stat() (*Node, error) {
 
 	hostname, err := os.Hostname()
 	if err != nil {
-		log.Fatal("Get hostname: ", err.Error())
+		return nil, err
 	}
 	return &Node{hostname, boot, d.String(), tt}, nil
+}
+
+//ShowBaseInfo get node system info
+func ShowBaseInfo(c *gin.Context) {
+	sysinfo, err := baseInfo()
+	if err != nil {
+		log.Fatal("Get node system info error: ", err)
+	}
+	utils.Render(
+		c,
+		gin.H{
+			"title":   "System Status",
+			"name":    "System Base Infomation",
+			"payload": sysinfo,
+		},
+		"stat.html",
+	)
 }
